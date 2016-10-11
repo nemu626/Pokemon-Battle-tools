@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title>poekmon 내구 계산기</title>
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <link rel="STYLESHEET" href="http://narug.neocities.org/style_alkagi.css" type="text/css">
+        <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+  		<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+
+        <script type="text/javascript" src="poke_hbd.js"></script>      
+	</head>
+
+
+	<body>
+		<div>
+			<H1>포켓몬 내구 계산기</H1>
+			포켓몬 이름<input id ='pname' type ="text" size='7'><br>
+        	<table id = "bst" align = "center">
+        	<tr>
+        		<td>종족치 :</td>
+        		<td>HP</td>
+        		<td>방어</td>
+        		<td>특방</td></tr>
+        	<tr><td></td><td><input type="text" id ='bsH' size="3"></td>
+        	<td><input type="text" id ='bsB' size="3"></td>
+        	<td><input type="text" id ='bsD' size="3"></td>
+        	</tr>
+       <tr><td>	개체치 :</td><td> <input type="text" id ='ivH' size="3" value="31"></td>
+        	<td><input type="text" id ='ivB' size="3" value="31"></td>
+        	<td><input type="text" id ='ivD' size="3" value="31"></td></tr>
+        	<tr>
+        		<td>빠른입력</td>
+        		<td> <button onclick = "set_val('30','ivH')">30</button></td>
+        		<td> <button onclick = "set_val('30','ivB')">30</button></td>
+        		<td> <button onclick = "set_val('30','ivD')">30</button></td>
+        	</tr>
+     	</table>
+        	성격 :  
+        	 B1.1배<input type="radio" name="pnature" value="nb">&emsp;
+        	 D1.1배<input type="radio" name="pnature" value="nd">&emsp;
+        	 무보정<input type="radio" name="pnature" value="nz">   <br>
+
+        	 <br>
+        	 보정 아이템 : 
+        	 돌격조끼 <input type="checkbox" id="chokki" value = "true">&emsp;
+        	 진화의 휘석 <input type="checkbox" id="kiseki" value = "true">&emsp;<br>
+        	 내구(H,B,D)에 할당가능한 총 노력치 : 
+        	 <input type = "text" id='ev' value = '508' size="3">
+              <button onclick ="evset('252')">252</button>
+              <button onclick ="evset('256')">256</button>
+              <button onclick ="evset('508')">508</button><br><br>
+        	  <button id="calc">계산</button>
+        	  
+        	
+		</div>
+		<div id ="resultdiv">
+			<table class="display" border="0" id="result_table">
+				<thead> <tr><th>HP실능값</th><th>B실능값</th><th>D실능값</th><th>물리내구</th><th>특수내구</th><th>물리내구+특수내구</th><th>HP노력치</th><th>방어노력치</th><th>특방노력치</th></tr></thead> <tbody><tr><td> </td></tr> </tbody> 
+				</table>
+		</div>
+	</body>
+</html>

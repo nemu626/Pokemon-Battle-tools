@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<title> Pokemon sid tool</title>
+		<script>
+			function calc_sid(){
+				var id = parseInt(document.getElementById("id_val").value);
+				var sv = parseInt(document.getElementById("sv_val").value);
+				var result =  ((id/16)^sv)*16;
+				document.getElementById("result").value = result;
+				document.getElementById("result_plus").value = result+15;
+				
+				
+			}
+		</script>
+	</head>
+	<body>
+		자신의 아이디넘버 : <input type="test" id="id_val" size="6"><br>
+		자신의 SV값 : <input type="text" id="sv_val" size="6"><br>
+		<button onclick = "calc_sid()">계산</button><br>
+		결과(nSID 범위) : <input type="text" id="result" size="3"> ~ <input type="text" id="result_plus" size="3"><br>
+	</body>
+</html>

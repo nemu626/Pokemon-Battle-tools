@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!--
+2014 01
+By @Narugal_ove
+-->
+<html>
+	<head>
+		<title>ポケモンすばやさ調整</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+		<link rel="STYLESHEET" href="http://narug.neocities.org/style_alkagi.css" type="text/css">
+
+		<script>
+			$(function() {
+				$("#resultdiv").hide();
+				$.getJSON("pokebs.json", function(data) {
+					var narray = new Array();
+					for (var i in data) {
+						narray.push(data[i].NAME);
+					}
+					$("#pname").autocomplete({
+						source : narray,
+						select : function(ev, ui) {
+							$("#pname").val(ui.item.value);
+							var inpname = ui.item.value;
+							for (var i in data) {
+								if (inpname === data[i].NAME) {
+									$("#pbs").val(data[i].S);
+								}
+							}
+						}
+					});
+					$("#pname").change(function() {
+						var inpname = $("#pname").val();
+						for (var i in data) {
+							if (inpname === data[i].NAME)
+								$("#pbs").val(data[i].S);
+						}
+					});
+				});
+
+			});
+			function ivset(setval) {
+				$("#piv").val(setval);
+			}//個体値セット
+
+			function evset(setval) {
+				$("#pev").val(setval);
+			}
+
+			function natureset(setval) {
+				$("*[name=pnature]").val([setval]);
+			}
+
+			function plusrank(rank) {
+				var r = parseInt($("#prank").children(':selected').val());
+				if ((r < 6 && rank === 1) || (r > -6 && rank === -1))
+					$("#prank").val((r + rank).toString());
+			}
+
+			function speed_calc() {
+
+				var ev = parseInt($("#pev").val());
+				var iv = parseInt($("#piv").val());
+				var bs = parseInt($("#pbs").val());
+				var nature = parseFloat($("*[name=pnature]:checked").val());
+				var rank = parseInt($("#prank").children(':selected').val());
+				if (isNaN(bs))
+					alert("素早さの種族値を入力してください");
+				else if (isNaN(nature))
+					alert("性格を選んでください");
+				else if (isNaN(ev))
+					alert("努力値を入力してください");
+				else if (isNaN(iv))
+					alert("個体値を入力してください");
+				else if (ev < 0 || ev > 256)
+					alert("入力された努力値が不正です");
+				else if (iv < 0 || iv > 31)
+					alert("入力された個体値が不正です");
+				
+else {
+					$("#resultdiv").show();
+
+					var result = ((bs * 2 + iv + ev / 4) * 0.5 + 5) * nature;
+
+					if ($("#pscarf:checked").val() === "on")
+						result = result * 1.5;
+					if ($("#p2x:checked").val() === "on")
+						result = result * 2.0;
+
+					if (rank > 0)
+						result = result * (rank + 2) / 2;
+					else if (rank < 0)
+						result = result * 2 / (-rank + 2);
+
+					//alert(Math.round(result));
+					$("#resspeed").val("すばやさ:" + Math.round(result));
+					var resultbs = ((result / 1.1 - 5) * 2 - 31 - 252 / 4) / 2;
+					$("#res_saisoku").val(((result / 1.1 - 5) * 2 - 31 - 63) / 2);
+					$("#res_junsoku").val(((result / 1 - 5) * 2 - 31 - 63) / 2);
+					$("#res_muhuri").val(((result / 1 - 5) * 2 - 31) / 2);
+					$("#res_saidon").val(((result / 0.9 - 5) * 2) / 2);
+				}
+			}
+
+			function template_set(tem) {//1 : 最速 2 : 準速 3 : 無振り 4 : 最鈍
+				switch(tem) {
+					case 1:
+						ivset('31');
+						evset('252');
+						natureset('1.1');
+						break;
+					case 2:
+						ivset('31');
+						evset('252');
+						natureset('1');
+						break;
+					case 3:
+						ivset('31');
+						evset('0');
+						natureset('1');
+						break;
+					case 4:
+						ivset('0');
+						evset('0');
+						natureset('0.9');
+						break;
+				}
+			}
+
+		</script>
+	</head>
+
+	<body>
+		<div id ='div1'>
+			<h1> ポケモンすばやさ調整 </h1>
+			ポケモン名
+			<input id ="pname" type ="text" size='7'>
+			素早さ種族値
+			<input id ='pbs' type='text' size='3'>
+			<br>
+			テンプレ
+			<button onclick ="template_set(1)">
+				最速
+			</button>
+			<button onclick ="template_set(2)">
+				準速
+			</button>
+			<button onclick ="template_set(3)">
+				無振
+			</button>
+			<button onclick ="template_set(4)">
+				最鈍
+			</button>
+			<br>
+			性格&emsp;
+			<input type="radio" name="pnature" value="1.1">
+			1.1倍(ようき、おくびょう、せっかち、むじゃき)  &emsp;
+			<input type="radio" name="pnature" value="0.9">
+			0.9倍(なまいき、のんき、ゆうかん、れいせい)&emsp;
+			<input type="radio" name="pnature" value="1">
+			1.0倍(その他の性格)
+			<br>
+			個体値
+			<input id ='piv' type ='text' size='2'>
+			<button onclick ="ivset('31')">
+				31
+			</button>
+			<button onclick ="ivset('30')">
+				30
+			</button>
+			<button onclick ="ivset('0')">
+				0
+			</button>
+			<br>
+			努力値
+			<input type ='text' id='pev' size='3'>
+			<button onclick ="evset('0')">
+				0
+			</button>
+			<button onclick ="evset('252')">
+				252
+			</button>
+			<button onclick ="evset('4')">
+				4
+			</button>
+			<br>
+			ランク
+			<select id='prank' size='1'>
+				<option value ='0'>0</option>
+				<option value ='1'>+1</option><option value ='2'>+2</option><option value ='3'>+3</option>
+				<option value ='4'>+4</option><option value ='5'>+5</option><option value ='6'>+6</option>
+				<option value ='-1'>-1</option><option value ='-2'>-2</option><option value ='-3'>-3</option>
+				<option value ='-4'>-4</option><option value ='-5'>-5</option><option value ='-6'>-6</option>
+			</select>
+			<button onclick = "plusrank(1)">
+				+1
+			</button>
+			<button onclick = "plusrank(-1)">
+				-1
+			</button>
+			<BR>
+			こだわりスカーフ(×1.5)
+			<input type='checkbox' id='pscarf' value="on">
+			&emsp;黒い鉄球、パワーシリーズ、きょうせいギブス(×0.5)
+			<input type='checkbox' id='px05' value="on">
+			&emsp;おいかぜ、すいすい、すなかき、ようりょくそ、かるわざ(×2.0)
+			<input type ='checkbox' id='p2x' value='on'>
+			<br>
+			<button onclick = "speed_calc()">
+				実数値計算
+			</button>
+
+		</div>
+		<div id ='resultdiv'>
+			<br>
+			素早さ実数値 :
+			<input type ='text' id ='resspeed'>
+			<br>
+
+			この実数値は以下の種族値と同速です
+			<br>
+			<b>最速</b>(性格 + 個体値31 努力値252) :
+			<input type='text' id ='res_saisoku' size='7'>
+			族
+			<br>
+			<b>準速</b>(性格 - 個体値31 努力値252) :
+			<input type='text' id ='res_junsoku' size='7'>
+			族
+			<br>
+			<b>無振</b>(性格 - 個体値31 努力値 0 ) :
+			<input type='text' id ='res_muhuri'  size='7'>
+			族
+			<br>
+			<b>最遅</b>(性格 + 個体値 0 努力値 0 ) :
+			<input type='text' id ='res_saidon'  size='7'>
+			族
+			<br>
+			<A href="javascript:w=window.open('bstable.html','','scrollbars=yes,Width=300,Height=400');w.focus();">種族値表確認</A>
+
+		</div>
+
+	</body>
+</html>

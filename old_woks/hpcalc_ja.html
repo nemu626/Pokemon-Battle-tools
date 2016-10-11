@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		<title>ポケモンHP調整機</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+		<link rel="STYLESHEET" href="http://narug.neocities.org/style_alkagi.css" type="text/css">
+		<script>
+			function ivset(setval) {
+				$("#iv").val(setval);
+			}
+
+			$(function() {
+				var d;
+				var narray = new Array();
+				$.getJSON("pokebs.json", function(data) {
+					d = data;
+					for (var i in data) {
+						narray.push(data[i].NAME);
+					}
+					$("#pname").autocomplete({
+						source : narray,
+						select : function(ev, ui) {
+							$("#pname").val(ui.item.value);
+							var inpname = ui.item.value;
+							for (var i in data) {
+								if (inpname === data[i].NAME) {
+									$("#bs").val(data[i].H);
+								}
+							}
+						}
+					});
+				});
+				$("#pname").change(function() {
+					var inpname = $("#pname").val();
+					for (var i in d) {
+						if (inpname === d[i].NAME)
+							$("#bs").val(d[i].H);
+					}
+				});
+				$("#hpn").change(function() {
+					var n = $("#hpn").val();
+					for (var i = 1; i < n; i++)
+						$('#remain').append($('<option>').html(i).val(i));
+					for (var i = 1; i < n; i++)
+						$('#remain').append($('<option>').html(-i).val(-i));
+				});
+
+				$("#calc").click(function() {
+					$("#vv").empty();
+
+					var bs = parseInt($("#bs").val());
+					var iv = parseInt($("#iv").val());
+					var n = parseInt($("#hpn").val());
+					var rem = parseInt($("#remain").val());
+					if (rem < 0)
+						rem = n + rem;
+					var lv = 50;
+					var status;
+					if (isNaN(bs))
+						alert("素早さの種族値を入力してください");
+					else if (isNaN(iv))
+						alert("個体値を入力してください");
+					else if (iv < 0 || iv > 31)
+						alert("入力された個体値が不正です");
+					else {
+						for (var ev = 0; ev <= 252; ev = ev + 4) {
+							status = (bs * 2 + iv + ev / 4) * lv / 100 + 10 + lv;
+							if (status % n === rem) {
+								$("#vv").append("実数値:" + status + "&emsp;努力値" + ev + "<br>");
+							}
+						}
+					}
+				});
+
+			});
+
+		</script>
+	</head>
+	<body>
+		<h1>HP調整機</h1>
+		ポケモン名
+		<input id ="pname" type ="text" size='7'>
+		HP種族値
+		<input type="text" id ="bs" size="5">
+		<br>
+		HP個体値
+		<input type="text" id ="iv" size="5" value="31">
+		<button onclick ="ivset('31')">
+			31
+		</button>
+		<button onclick ="ivset('30')">
+			30
+		</button>
+		<button onclick ="ivset('0')">
+			0
+		</button>
+		<br>
+		<br>
+
+		調整 :
+		<input type="text" id ="hpn" size="2">
+		<b>n</b> +
+
+		<select id="remain" size="1">
+			<option value="0">0</option>
+		</select>
+		<br>
+		<button id="calc">
+			調整
+		</button>
+		<div id="vv"></div>
+	</body>
+</html>

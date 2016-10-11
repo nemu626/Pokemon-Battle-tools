@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--
+2014 01
+By @Narugal_ove
+-->
+<html lang="ja">
+	
+    <head>
+        <title>ポケモンすばやさ抜き調整機</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">	
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <script src = "poke_nuki.js">　</script>
+    </head>
+    <body style="background-color:#EFEFEF">
+    	<div class="container">
+    	<div class="row">
+    	<div id="adjust_pokemon" class="col-sm-6">
+    		<h3>調整したいポケモン</h3>
+			ポケモン名<input id ="adp_name" type ="text" size='7' class="input-sm">
+			素早さ種族値<input id ='adp_bs' type='text' size='3' class="input-sm"><br>
+ 			個体値
+ 				<input id ='adp_iv' type ='text' size='2' value="31" class="input-sm">
+ 				<div class="btn-group btn-group-xs">
+				<button onclick ="set_val('30','adp_iv')" class="btn btn-info">30</button>
+				<button onclick ="set_val('0','adp_iv')" class="btn btn-info">0</button>
+				</div><br>
+			ランク補正
+			<select id='adp_rank' size='1' style="width:100px">
+                <option value ='0'>0</option>
+                <option value ='1'>+1</option><option value ='2'>+2</option><option value ='3'>+3</option>
+                <option value ='4'>+4</option><option value ='5'>+5</option><option value ='6'>+6</option>
+                <option value ='-1'>-1</option><option value ='-2'>-2</option><option value ='-3'>-3</option>
+                <option value ='-4'>-4</option><option value ='-5'>-5</option><option value ='-6'>-6</option>                
+        	</select>
+        		<div class="btn-group btn-group-xs">
+        		<button onclick = "plusrank(1,'adp_rank')" class="btn btn-success">+1</button> 
+        		<button onclick = "plusrank(-1,'adp_rank')" class="btn btn-warning">-1</button></div><BR>
+        	どうぐ
+        	<select id='adp_item' size='1' style="width:250px">
+        		<option value="1.0">無し</option>
+        		<option value="1.5">こだわりスカーフ(×1.5)</option>
+        		<option value="0.5">黒い鉄球、ギブス、パワー系(×0.5)</option>	
+        	</select><br>
+        	特性 
+        	<select id='adp_ability' size='1' style="width:250px">
+        		<option value="1.0">無し</option>
+        		<option value="1.5">はやあし(×1.5)</option>
+        		<option value="2.0">すいすい、ようりょくそ、かるわざ(×2)</option>
+        		<option value="0.5">スロースタート(×0.5)</option>	
+        	</select><br>
+        	その他 &emsp;
+        	麻痺<input type="checkbox" id='adp_mahi' value="on">&emsp;
+        	おいかぜ<input type="checkbox" id='adp_oikaze' value="on">
+        	<br>
+        	<br>
+        	<br><button class ="btn btn-primary" id="calc_button">計算</button>
+        		
+        	
+    	</div>
+    	<div id="target_pokemon" class="col-sm-6">
+    		<h3>抜きたいポケモン</h3>
+			ポケモン名<input id ="tgp_name" type ="text" size='7' class="input-sm">
+			素早さ種族値<input id ='tgp_bs' type='text' size='3' class="input-sm"><br>
+ 			個体値
+ 				<input id ='tgp_iv' type ='text' size='2' value="31" class="input-sm">
+ 				<div class="btn-group btn-group-xs">
+				<button onclick ="set_val('30','tgp_iv')" class="btn btn-info">30</button>
+				<button onclick ="set_val('0','tgp_iv')" class="btn btn-info">0</button>
+				</div><br>
+			ランク補正
+			<select id='tgp_rank' size='1' style="width:100px">
+                <option value ='0'>0</option>
+                <option value ='1'>+1</option><option value ='2'>+2</option><option value ='3'>+3</option>
+                <option value ='4'>+4</option><option value ='5'>+5</option><option value ='6'>+6</option>
+                <option value ='-1'>-1</option><option value ='-2'>-2</option><option value ='-3'>-3</option>
+                <option value ='-4'>-4</option><option value ='-5'>-5</option><option value ='-6'>-6</option>                
+        	</select>
+        		<div class="btn-group btn-group-xs">
+        		<button onclick = "plusrank(1,'tgp_rank')" class="btn btn-success">+1</button> 
+        		<button onclick = "plusrank(-1,'tgp_rank')" class="btn btn-warning">-1</button></div><BR>
+        	どうぐ
+        	<select id='tgp_item' size='1' style="width:250px">
+        		<option value="1.0">無し</option>
+        		<option value="1.5">こだわりスカーフ(×1.5)</option>
+        		<option value="0.5">黒い鉄球、ギブス、パワー系(×0.5)</option>	
+        	</select><br>
+        	特性 
+        	<select id='tgp_ability' size='1' style="width:250px">
+        		<option value="1.0">無し</option>
+        		<option value="1.5">はやあし(×1.5)</option>
+        		<option value="2.0">すいすい、ようりょくそ、かるわざ(×2)</option>
+        		<option value="0.5">スロースタート(×0.5)</option>	
+        	</select><br>
+        	その他 &emsp;
+        	麻痺<input type="checkbox" id='tgp_mahi' value="on">&emsp;
+        	おいかぜ<input type="checkbox" id='tgp_oikaze' value="on"><br><br>
+        	
+        	性格
+        	 <select id='tgp_nature' size='1' style="width:250px">
+        		<option value="1.1"> 1.1倍(ようき、おくびょう、せっかち、むじゃき) </option>
+        		<option value="0.9"> 0.9倍(なまいき、のんき、ゆうかん、れいせい)</option>
+        		<option value="1.0">1.0倍(その他の性格)</option>
+        	</select><br>
+        	努力値
+        	<input id ='tgp_ev' type ='text' size='3' value="252" class="input-sm">
+        	 	<div class="btn-group btn-group-xs">
+				<button onclick ="set_val('0','tgp_ev')" class="btn btn-info">0</button>
+				<button onclick ="set_val('4','tgp_ev')" class="btn btn-info">4</button>
+				<button onclick ="set_val('252','tgp_ev')" class="btn btn-info">252</button>
+				</div><br>
+				
+			ワンクリック入力
+			<div class="btn-group">
+				<button onclick ="oneclick_set('31','252','1.1','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">最速</button>
+				<button onclick ="oneclick_set('31','252','1.0','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">準速</button>
+				<button onclick ="oneclick_set('31','0','1.0','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">無振り</button>
+				<button onclick ="oneclick_set('0','0','0.9','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">最鈍</button>
+				</div><br>
+				
+        	
+        	
+    	</div>
+    	</div>
+ 		<div class="row">
+   			<div id="result_div" class="col-sm-12">
+   			 	<h2>調整結果</h2> 調整実数値 <input type="text" id = "target_speed">
+   			 	<table class = "table table-hover" id = "result_table">
+   			 		<tr>
+   			 			<th>性格</th><th>抜き(+1)に必要な努力値</th><th>実数値</th></tr>
+   			 		<tr>
+   			 			<td>性格補正+(×1.1)</td><td id="plus_ev"></td><td id="plus_stat"></td>
+   			 		</tr><tr>
+   			 			<td>性格補正0(×1.0)</td><td id="zero_ev"></td><td id="zero_stat"></td>
+   			 		</tr><tr>
+   			 			<td>性格補正-(×0.9)</td><td id="minus_ev"></td><td id="minus_stat"></td>
+   			 		</tr>
+   			 	</table>
+   			 	
+   			 </div>
+   		</div>		
+   		</div>
+    </body>
+</html>

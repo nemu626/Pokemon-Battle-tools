@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--
+2014 01
+By @Narugal_ove
+-->
+<html lang="ko">
+	
+    <head>
+        <title>포켓몬 스핏 보정 계산기</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">	
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <script src = "poke_nuki.js">　</script>
+    </head>
+    <body style="background-color:#EFEFEF">
+    	<div class="container">
+    	<div class="row">
+    	<div id="adjust_pokemon" class="col-sm-6">
+    		<h3>조정을 원하는 포켓몬</h3>
+			포켓몬 이름<input id ="adp_name" type ="text" size='7' class="input-sm">
+			스핏 종족치<input id ='adp_bs' type='text' size='3' class="input-sm"><br>
+ 			개체치
+ 				<input id ='adp_iv' type ='text' size='2' value="31" class="input-sm">
+ 				<div class="btn-group btn-group-xs">
+				<button onclick ="set_val('30','adp_iv')" class="btn btn-info">30</button>
+				<button onclick ="set_val('0','adp_iv')" class="btn btn-info">0</button>
+				</div><br>
+			랭크보정
+			<select id='adp_rank' size='1' style="width:100px">
+                <option value ='0'>0</option>
+                <option value ='1'>+1</option><option value ='2'>+2</option><option value ='3'>+3</option>
+                <option value ='4'>+4</option><option value ='5'>+5</option><option value ='6'>+6</option>
+                <option value ='-1'>-1</option><option value ='-2'>-2</option><option value ='-3'>-3</option>
+                <option value ='-4'>-4</option><option value ='-5'>-5</option><option value ='-6'>-6</option>                
+        	</select>
+        		<div class="btn-group btn-group-xs">
+        		<button onclick = "plusrank(1,'adp_rank')" class="btn btn-success">+1</button> 
+        		<button onclick = "plusrank(-1,'adp_rank')" class="btn btn-warning">-1</button></div><BR>
+        	도구
+        	<select id='adp_item' size='1' style="width:250px">
+        		<option value="1.0">없음</option>
+        		<option value="1.5">구애 스카프(×1.5)</option>
+        		<option value="0.5">철구、깁스、파워계열(×0.5)</option>	
+        	</select><br>
+        	특성 
+        	<select id='adp_ability' size='1' style="width:250px">
+        		<option value="1.0">없음</option>
+        		<option value="1.5">속보(×1.5)</option>
+        		<option value="2.0">쓱쓱、엽록소、곡예(×2)</option>
+        		<option value="0.5">슬로우스타트(×0.5)</option>	
+        	</select><br>
+        	기타 &emsp;
+        	마비<input type="checkbox" id='adp_mahi' value="on">&emsp;
+        	순풍<input type="checkbox" id='adp_oikaze' value="on">
+        	<br>
+        	<br>
+        	<br><button class ="btn btn-primary" id="calc_button">계산</button>
+        		
+        	
+    	</div>
+    	<div id="target_pokemon" class="col-sm-6">
+    		<h3>추월하고 싶은 대상 포켓몬</h3>
+			포켓몬<input id ="tgp_name" type ="text" size='7' class="input-sm">
+			스피드 종족치<input id ='tgp_bs' type='text' size='3' class="input-sm"><br>
+ 			개체치
+ 				<input id ='tgp_iv' type ='text' size='2' value="31" class="input-sm">
+ 				<div class="btn-group btn-group-xs">
+				<button onclick ="set_val('30','tgp_iv')" class="btn btn-info">30</button>
+				<button onclick ="set_val('0','tgp_iv')" class="btn btn-info">0</button>
+				</div><br>
+			랭크보정
+			<select id='tgp_rank' size='1' style="width:100px">
+                <option value ='0'>0</option>
+                <option value ='1'>+1</option><option value ='2'>+2</option><option value ='3'>+3</option>
+                <option value ='4'>+4</option><option value ='5'>+5</option><option value ='6'>+6</option>
+                <option value ='-1'>-1</option><option value ='-2'>-2</option><option value ='-3'>-3</option>
+                <option value ='-4'>-4</option><option value ='-5'>-5</option><option value ='-6'>-6</option>                
+        	</select>
+        		<div class="btn-group btn-group-xs">
+        		<button onclick = "plusrank(1,'tgp_rank')" class="btn btn-success">+1</button> 
+        		<button onclick = "plusrank(-1,'tgp_rank')" class="btn btn-warning">-1</button></div><BR>
+        	도구
+        	<select id='tgp_item' size='1' style="width:250px">
+        		<option value="1.0">없음</option>
+        		<option value="1.5">구애 스카프(×1.5)</option>
+        		<option value="0.5">철구,깁스,파워 계열(×0.5)</option>	
+        	</select><br>
+        	특성 
+        	<select id='tgp_ability' size='1' style="width:250px">
+        		<option value="1.0">없음</option>
+        		<option value="1.5">속보(×1.5)</option>
+        		<option value="2.0">쓱쓱、엽록스、곡예(×2)</option>
+        		<option value="0.5">슬로우스타트(×0.5)</option>	
+        	</select><br>
+        	기타 &emsp;
+        	마비<input type="checkbox" id='tgp_mahi' value="on">&emsp;
+        	순풍<input type="checkbox" id='tgp_oikaze' value="on"><br><br>
+        	
+        	성격
+        	 <select id='tgp_nature' size='1' style="width:250px">
+        		<option value="1.1"> 1.1배(명량,겁쟁이,천진난만,성급) </option>
+        		<option value="0.9"> 0.9배(건방,용감,무사태평,냉정)</option>
+        		<option value="1.0">1.0배(기타 성격)</option>
+        	</select><br>
+        	노력치
+        	<input id ='tgp_ev' type ='text' size='3' value="252" class="input-sm">
+        	 	<div class="btn-group btn-group-xs">
+				<button onclick ="set_val('0','tgp_ev')" class="btn btn-info">0</button>
+				<button onclick ="set_val('4','tgp_ev')" class="btn btn-info">4</button>
+				<button onclick ="set_val('252','tgp_ev')" class="btn btn-info">252</button>
+				</div><br>
+				
+			빠른 입력
+			<div class="btn-group">
+				<button onclick ="oneclick_set('31','252','1.1','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">252 풀보정</button>
+				<button onclick ="oneclick_set('31','252','1.0','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">252 무보정</button>
+				<button onclick ="oneclick_set('31','0','1.0','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">0 무보정</button>
+				<button onclick ="oneclick_set('0','0','0.9','tgp_iv','tgp_ev','tgp_nature')" class="btn btn-info">0 Z -보정</button>
+				</div><br>
+				
+        	
+        	
+    	</div>
+    	</div>
+ 		<div class="row">
+   			<div id="result_div" class="col-sm-12">
+   			 	<h2>조정결과</h2> 조정 대상 실수치 <input type="text" id = "target_speed">
+   			 	<table class = "table table-hover" id = "result_table">
+   			 		<tr>
+   			 			<th>성격</th><th>추월(+1)에 필요한 노력치</th><th>실수치</th></tr>
+   			 		<tr>
+   			 			<td>성격보정+(×1.1)</td><td id="plus_ev"></td><td id="plus_stat"></td>
+   			 		</tr><tr>
+   			 			<td>성격보정0(×1.0)</td><td id="zero_ev"></td><td id="zero_stat"></td>
+   			 		</tr><tr>
+   			 			<td>성격보정-(×0.9)</td><td id="minus_ev"></td><td id="minus_stat"></td>
+   			 		</tr>
+   			 	</table>
+   			 	
+   			 </div>
+   		</div>		
+   		</div>
+    </body>
+</html>
